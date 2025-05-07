@@ -35,10 +35,10 @@ public class SegmentMover : MonoBehaviour
     public void ExtendSegment(bool isVisible)
     {
         targetPosition = isVisible ? extendedPosition : retractedPosition;
-        lerpFactor = 0f; // Zurï¿½cksetzen der Lerp-Animation
+        lerpFactor = 0f; // Zurücksetzen der Lerp-Animation
     }
 
-    public void Update()
+    private void Update()
     {
         lerpFactor += Mathf.Clamp01(moveSpeed * Time.deltaTime); // Zeitbasiertes Lerp
         transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, lerpFactor);

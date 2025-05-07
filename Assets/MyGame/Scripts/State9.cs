@@ -1,18 +1,36 @@
-public class State9 : ISevenSegmentDisplayState
+using UnityEngine;
+
+public class State9 : I7SegmentDisplayState
 {
-   public int GetDigit()
-   {
-    return 9;
-   }
+    // erstelle static - Variable
+    private static I7SegmentDisplayState _state;
 
+    // Konstruktor fuer Objekte vom Typ State0
+    private State9()
+    {
 
-   public ISevenSegmentDisplayState CountDown()
-   {
-    return new State8();
-   }
+    }
 
-   public ISevenSegmentDisplayState CountUp()
-   {
-    return new State0();
-   }
+    public static I7SegmentDisplayState GetState()
+    {
+        // TODO: dot not return null values!!!!
+        if (_state == null)
+        {
+            _state = new State9();
+        }
+        return _state;
+    }
+
+    public int GetDigit()
+    {
+        return 9;
+    }
+    public I7SegmentDisplayState CountDown()
+    {
+        return State8.GetState();
+    }
+    public I7SegmentDisplayState CountUp()
+    {
+        return State0.GetState();
+    }
 }

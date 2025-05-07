@@ -83,7 +83,7 @@ public class SevenSegmentDisplay : MonoBehaviour
 
     public void ExtendSegmentsFor(int number)
     {
-        if (number < 0 || number > 9) return; // Card Clause; Early Return: Nur Zahlen 0ï¿½9 zulassen
+        if (number < 0 || number > 9) return; // Card Clause; Early Return: Nur Zahlen 0–9 zulassen
 
         for (int i = 0; i < segments.Length; i++)
         {

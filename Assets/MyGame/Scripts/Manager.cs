@@ -3,16 +3,15 @@ using UnityEngine;
 public class Manager : MonoBehaviour
 {
     [SerializeField] private SevenSegmentDisplay myDigit;
-
-
     private UIManager myUIManager;
+
     private const int MinDigit = 0;
     private const int MaxDigit = 9;
-    public ISevenSegmentDisplayState myDisplayState;
-    
+
+    private I7SegmentDisplayState myDisplayState;
     private void Start()
     {
-        
+
         if(myDigit == null)
         {
             Debug.LogWarning($"In Component `{GetType().Name}` attached to GameObject `{gameObject.name}`, " +
@@ -31,25 +30,36 @@ public class Manager : MonoBehaviour
 
         myUIManager.SetDisplay(myDigit);
         myDigit.ResetSegmentDisplay();
+        // Initialize Segment State
+        // myDisplayState = new State0();
+        myDisplayState = State0.GetState();
     }
 
     private void Update()
     {
+        if (myDigit == null) return;
         if (!myDigit.isActive) return;
+        //if (myDigit.isNumberSet) return;
 
-        int currentDigit = myDisplayState.GetDigit();
-        myDigit.ExtendSegmentsFor(currentDigit);
+        // Handle Input
+        myDigit.ExtendSegmentsFor(myDisplayState.GetDigit());
 
-        for (int i = MinDigit; i <= MaxDigit; i++)
+        if (IsPlusPressed())
         {
-            if (IsDigitPressed(i))
-            {
-                HandleDigitInput(i);
-                break;
-            }
+            myDisplayState = myDisplayState.CountUp();
         }
-
-        HandleDigitInput(currentDigit);
+        if (IsMinusPressed())
+        {
+            myDisplayState = myDisplayState.CountDown();
+        }
+        //for (int i = MinDigit; i <= MaxDigit; i++)
+        //{
+        //    if (IsDigitPressed(i))
+        //    {
+        //        HandleDigitInput(i);
+        //        break;
+        //    }
+        //}
     }
 
     private void HandleDigitInput(int digit)
@@ -61,16 +71,13 @@ public class Manager : MonoBehaviour
         myUIManager.ActivateResetBtn(true);
     }
 
-    private bool IsPlusPressed()
-    {
-        return Input.GetKeyDown(KeyCode.Equals) ||
-               Input.GetKeyDown(KeyCode.KeypadPlus);
+    private bool IsPlusPressed() {
+        return Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus);
     }
- 
+
     private bool IsMinusPressed()
     {
-        return Input.GetKeyDown(KeyCode.Minus) ||
-               Input.GetKeyDown(KeyCode.KeypadMinus);
+        return Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus);
     }
 
     private bool IsDigitPressed(int i)
